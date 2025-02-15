@@ -2,7 +2,8 @@
 // Notes for Eman:
 //--------------------------------
 // 1- (SOLVED) Password saved in db as a plainText and not hashed, this is a sensitve problem, take care :(
-// 2- Use the return next(new AppError("Error Message", code)) for better error messages handling and code
+// 2- Use the catchAsync wrapper for the try/catch error for the controllers instead of writing them manually for each controller
+// and then use inside it the return next(new AppError("Error Message", code)) for better error messages handling and code
 // and use a custom error structure only for validation
 //=======================================
 
