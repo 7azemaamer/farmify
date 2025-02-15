@@ -1,28 +1,41 @@
 export const catchAsync = (fn) => async (req, res, next) => {
   try {
-    await fn(req, res, next)
+    await fn(req, res, next);
   } catch (err) {
-    next(err)
+    next(err);
   }
-}
+};
 export class AppError extends Error {
-  constructor(message, statusCode) {
-    super(message)
-    this.statusCode = statusCode
-    Error.captureStackTrace(this, this.constructor)
+  constructor(errorMessage, statusCode) {
+    super(errorMessage);
+    this.statusCode = statusCode;
+    Error.captureStackTrace(this, this.constructor);
   }
 }
 
 export const errorHandler = (err, req, res, next) => {
-  if (err instanceof AppError) {
-    return res.status(err.statusCode).json({
-      status: err.status,
+  const statusCode = err.statusCode || 500;
+  const status = err.status || "error";
+
+  // In development mode, include the stack trace
+  if (process.env.MODE === "development") {
+    return res.status(statusCode).json({
+      status,
       message: err.message,
-    })
+      stack: err.stack,
+    });
+  }
+
+  // In production
+  if (err instanceof AppError) {
+    return res.status(statusCode).json({
+      status,
+      error: err.message,
+    });
   }
 
   res.status(500).json({
     status: "error",
-    message: "Something went very wrong!",
-  })
-}
+    error: "Something went very wrong!",
+  });
+};
