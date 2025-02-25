@@ -100,6 +100,7 @@ export const verifyOtp = catchAsync(async (req, res, next) => {
 export const signIn = catchAsync(async (req, res, next) => {
   //1- get email, password from body
   const { email, password } = req.body;
+  console.log(email,password);
   //2- check if email exists first
   const user = await User.findOne({ email });
   if (!user) {
@@ -112,10 +113,10 @@ export const signIn = catchAsync(async (req, res, next) => {
     return next(new AppError("Invalid email or password", 401));
   }
   //5- generate token
-  const token = signToken({ id: user._id });
+  const token = signToken({ data: {id:user._id },expiresIn:process.env.JWT_RESET_EXPIRES_IN});
   res.status(200).json({
     status: "success",
-    token,
+      token,
   });
 });
 //===========================================

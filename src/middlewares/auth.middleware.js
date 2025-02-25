@@ -31,3 +31,26 @@ export const authMiddleware = catchAsync(async (req, res, next) => {
     );
   }
 });
+// middlewares/auth.js
+export const isAdmin = (req, res, next) => {
+  if (!req.user || (req.user.role !== 'admin' && req.user.role !== 'superadmin')) {
+      return res.status(403).json({ message: 'Access denied' });
+  }
+  next();
+};
+
+  export const isUser = (req, res, next) => {
+  if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+  }
+  next();
+};
+
+export const isSuperAdmin = (req, res, next) => {
+  if (!req.user || req.user.role !== 'superadmin') {
+      return res.status(403).json({ message: 'Access denied' });
+  }
+  next();
+};
+
+export default {isAdmin,isSuperAdmin,isUser};
