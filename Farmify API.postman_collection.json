@@ -1,0 +1,1656 @@
+{
+	"info": {
+		"_postman_id": "ab05c72e-92a7-4ded-8b87-143188948ffa",
+		"name": "Farmify API",
+		"description": "API collection for Farmify application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33034032",
+		"_collection_link": "https://farmify.postman.co/workspace/Development~fde3ad50-399d-43c8-ae52-f347f1920778/collection/33034032-ab05c72e-92a7-4ded-8b87-143188948ffa?action=share&source=collection_link&creator=33034032"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Hazem\",\n    \"lastName\": \"Aamer\",\n    \"email\": \"zicoaamer@gmail.com\",\n    \"phone\": \"1234567890\",\n    \"password\": \"password123\",\n    \"confirmPassword\": \"password123\",\n    \"country\": \"USA\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/signup",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Register a new user"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"zicoaamer@gmail.com\",\n    \"otp\": 154604\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/verify-email",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"verify-email"
+							]
+						},
+						"description": "Verify user email with OTP"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login with email and password"
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"zicoaamer@gmail.com\",\n    \"otp\": 123456\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/forget-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"forget-password"
+							]
+						},
+						"description": "Request password reset"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Reset Otp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"zicoaamer@gmail.com\",\r\n    \"otp\": 123456\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/verify-reset-otp",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"verify-reset-otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"newPassword\": \"newpassword123\",\n    \"confirmPassword\": \"newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Y2YzZDQwNTI5ZjQwNzA2Mjk4MjRmMCIsImVtYWlsIjoiemljb2FhbWVyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiJwYXNzd29yZC1yZXNldCIsImlhdCI6MTc0MTYzNTYwMCwiZXhwIjoxNzQxNjM2NTAwfQ.SeiF0WjdUXo4OaDrb4LnSSkYIRBpPjqel3GkhKLj3mA",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"reset-password"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Y2YzZDQwNTI5ZjQwNzA2Mjk4MjRmMCIsImVtYWlsIjoiemljb2FhbWVyQGdtYWlsLmNvbSIsInB1cnBvc2UiOiJwYXNzd29yZC1yZXNldCIsImlhdCI6MTc0MTYzNTYwMCwiZXhwIjoxNzQxNjM2NTAwfQ.SeiF0WjdUXo4OaDrb4LnSSkYIRBpPjqel3GkhKLj3mA"
+								}
+							]
+						},
+						"description": "Reset password with OTP"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints"
+		},
+		{
+			"name": "User Management",
+			"item": [
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Get current user profile"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "firstName",
+									"value": "John",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Smith",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "9876543210",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Canada",
+									"type": "text"
+								},
+								{
+									"key": "profileImage",
+									"type": "file",
+									"src": "/path/to/image.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Update user profile"
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentPassword\": \"password123\",\n    \"newPassword\": \"newpassword123\",\n    \"confirmPassword\": \"newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/change-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"change-password"
+							]
+						},
+						"description": "Change user password"
+					},
+					"response": []
+				}
+			],
+			"description": "User management endpoints"
+		},
+		{
+			"name": "Admin Dashboard",
+			"item": [
+				{
+					"name": "Get Dashboard Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/dashboard",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"dashboard"
+							]
+						},
+						"description": "Get dashboard statistics"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							]
+						},
+						"description": "Get all users (superAdmin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "userId"
+								}
+							]
+						},
+						"description": "Get user by ID (superAdmin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Role",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"role\": \"warehouseAdmin\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/:id/role",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users",
+								":id",
+								"role"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "userId"
+								}
+							]
+						},
+						"description": "Update user role (superAdmin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Admin dashboard endpoints"
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products?minPrice=10&maxPrice=100&sort=price-asc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "67cf4345132914dc40a6c23a",
+									"disabled": true
+								},
+								{
+									"key": "minPrice",
+									"value": "10"
+								},
+								{
+									"key": "maxPrice",
+									"value": "100"
+								},
+								{
+									"key": "sort",
+									"value": "price-asc"
+								}
+							]
+						},
+						"description": "Get all products with optional filters"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/search?query=organic",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "organic"
+								}
+							]
+						},
+						"description": "Search products by keyword"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/67cf43e7481a033ff2e85470",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"67cf43e7481a033ff2e85470"
+							]
+						},
+						"description": "Get product details by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Products by Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/category/67cf4345132914dc40a6c23a",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"category",
+								"67cf4345132914dc40a6c23a"
+							]
+						},
+						"description": "Get products by category"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Product Rating",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": 5,\n    \"review\": \"Great product!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products/67cf43e7481a033ff2e85470/rating",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"67cf43e7481a033ff2e85470",
+								"rating"
+							]
+						},
+						"description": "Add or update product rating"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Product Name",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Product description",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "99.99",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "categoryId",
+									"type": "text"
+								},
+								{
+									"key": "inStock",
+									"value": "100",
+									"type": "text"
+								},
+								{
+									"key": "warehouse",
+									"value": "warehouseId",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/path/to/image1.jpg"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/path/to/image2.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						},
+						"description": "Create a new product (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product (Admin)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Updated product",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "i did update this prod",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "9000",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "67cf4345132914dc40a6c23a",
+									"type": "text"
+								},
+								{
+									"key": "inStock",
+									"value": "50",
+									"type": "text"
+								},
+								{
+									"key": "isAvailable",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/hazoo/Downloads/mobile (1) (1) (1) (1).jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products/67cf43e7481a033ff2e85470",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"67cf43e7481a033ff2e85470"
+							]
+						},
+						"description": "Update a product (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/products/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "productId"
+								}
+							]
+						},
+						"description": "Delete a product (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Product management endpoints"
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories"
+							]
+						},
+						"description": "Get all active categories"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "categoryId"
+								}
+							]
+						},
+						"description": "Get category details by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Category (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "mangos",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "sasa",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/hazoo/Downloads/desktop (1).jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories"
+							]
+						},
+						"description": "Create a new category (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category (Admin)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Updated cat",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Updated description for catt",
+									"type": "text"
+								},
+								{
+									"key": "isActive",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/path/to/new-category-image.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/categories/67cf4345132914dc40a6c23a",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories",
+								"67cf4345132914dc40a6c23a"
+							]
+						},
+						"description": "Update a category (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/categories/67cf4345132914dc40a6c23a",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories",
+								"67cf4345132914dc40a6c23a"
+							]
+						},
+						"description": "Delete a category (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Category management endpoints"
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"products\": [\n        {\n            \"productId\": \"67cf43e7481a033ff2e85470\",\n            \"quantity\": 5\n        },\n           {\n            \"productId\": \"67cf43e7481a033ff2e85470\",\n            \"quantity\": 5\n        }\n    ],\n    \"shippingAddress\": {\n        \"address\": \"123 Main St\",\n        \"city\": \"New York\",\n        \"postalCode\": \"10001\",\n        \"country\": \"USA\"\n    },\n    \"paymentMethod\": \"stripe\" // or cashOnDelivery\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						},
+						"description": "Create a new order"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Orders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						},
+						"description": "Get all orders for the current user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/orders/67cf483c680655f670208a59",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"67cf483c680655f670208a59"
+							]
+						},
+						"description": "Get order details by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Order",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/orders/67cf46a2500c2be49eb35ada/cancel",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"67cf46a2500c2be49eb35ada",
+								"cancel"
+							]
+						},
+						"description": "Cancel an order (only if status is 'pending')"
+					},
+					"response": []
+				}
+			],
+			"description": "Order management endpoints"
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Get User Cart",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart"
+							]
+						},
+						"description": "Get current user's cart"
+					},
+					"response": []
+				},
+				{
+					"name": "Add to Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productId\": \"67cf43e7481a033ff2e85470\",\n    \"quantity\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart"
+							]
+						},
+						"description": "Add item to cart"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cart Item",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 2\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/cart/items/:itemId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart",
+								"items",
+								":itemId"
+							],
+							"variable": [
+								{
+									"key": "itemId",
+									"value": "cartItemId"
+								}
+							]
+						},
+						"description": "Update cart item quantity"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Cart Item",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/cart/items/:itemId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart",
+								"items",
+								":itemId"
+							],
+							"variable": [
+								{
+									"key": "itemId",
+									"value": "cartItemId"
+								}
+							]
+						},
+						"description": "Remove item from cart"
+					},
+					"response": []
+				},
+				{
+					"name": "Clear Cart",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart"
+							]
+						},
+						"description": "Remove all items from cart"
+					},
+					"response": []
+				}
+			],
+			"description": "Cart management endpoints"
+		},
+		{
+			"name": "Equipment",
+			"item": [
+				{
+					"name": "Get All Equipment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/equipments?category=67cf4345132914dc40a6c23a&minPrice=100&maxPrice=1000&sort=price-asc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipments"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "67cf4345132914dc40a6c23a"
+								},
+								{
+									"key": "minPrice",
+									"value": "100"
+								},
+								{
+									"key": "maxPrice",
+									"value": "1000"
+								},
+								{
+									"key": "sort",
+									"value": "price-asc"
+								}
+							]
+						},
+						"description": "Get all equipment with optional filters"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Equipment by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/equipments/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipments",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "equipmentId"
+								}
+							]
+						},
+						"description": "Get equipment details by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Equipment by Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/equipments/category/:category",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipments",
+								"category",
+								":category"
+							],
+							"variable": [
+								{
+									"key": "category",
+									"value": "Category"
+								}
+							]
+						},
+						"description": "Get equipment by category"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Equipment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/equipments/search?query=bmw",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipments",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "bmw"
+								}
+							]
+						},
+						"description": "Search equipment by keyword"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Equipment (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "BMW",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "One of my dream cars lol ",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "888888888987844",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "67cf4345132914dc40a6c23a",
+									"type": "text"
+								},
+								{
+									"key": "manufacturer",
+									"value": "Microsoft",
+									"type": "text"
+								},
+								{
+									"key": "inStock",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "specifications",
+									"value": "{\"weight\":\"10kg\",\"dimensions\":\"100x50x30cm\"}",
+									"description": "// bnfs el shakl da bd 3shan form data fmsh hyshtghl fe postman",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "warehouseId",
+									"value": "67cf4316132914dc40a6c237",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/hazoo/Downloads/cFjJt6GBcqFsbjOKPADURUKhVb77vfS2OHqsr8al (1) (1).png"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": [
+										"/path/to/equipment-image2.jpg",
+										"/C:/Users/hazoo/Downloads/mobile (1) (1) (1).jpg"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/equipments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipments"
+							]
+						},
+						"description": "Create new equipment (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Equipment (Admin)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "BMW 320i",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "i updated the mbw",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "98989897887",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "67cf4345132914dc40a6c23a",
+									"type": "text"
+								},
+								{
+									"key": "manufacturer",
+									"value": "BMV",
+									"type": "text"
+								},
+								{
+									"key": "inStock",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "specifications",
+									"value": "{\"weight\":\"12kg\",\"dimensions\":\"120x60x40cm\"}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "isAvailable",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": [
+										"/path/to/new-equipment-image.jpg",
+										"/C:/Users/hazoo/Downloads/desktop.jpg"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/equipments/67cf48f1680655f670208a76",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipments",
+								"67cf48f1680655f670208a76"
+							]
+						},
+						"description": "Update equipment (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Equipment (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/equipments/67cf48f1680655f670208a76",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"equipments",
+								"67cf48f1680655f670208a76"
+							]
+						},
+						"description": "Delete equipment (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Equipment management endpoints"
+		},
+		{
+			"name": "Warehouses",
+			"item": [
+				{
+					"name": "Get All Warehouses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/warehouses",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"warehouses"
+							]
+						},
+						"description": "Get all active warehouses"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Warehouse by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/warehouses/67cf4316132914dc40a6c237",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"warehouses",
+								"67cf4316132914dc40a6c237"
+							]
+						},
+						"description": "Get warehouse details by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Warehouse (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "my warehouse ",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "3asher mn ramadan",
+									"type": "text"
+								},
+								{
+									"key": "capacity",
+									"value": "1000",
+									"type": "text"
+								},
+								{
+									"key": "adminId",
+									"value": "67cf3ce7b192cf469d615332",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/path/to/warehouse-image.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/warehouses",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"warehouses"
+							]
+						},
+						"description": "Create a new warehouse (superAdmin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Warehouse (Admin)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "my warehouse",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "badr",
+									"type": "text"
+								},
+								{
+									"key": "capacity",
+									"value": "1500",
+									"type": "text"
+								},
+								{
+									"key": "isActive",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/path/to/new-warehouse-image.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/warehouses/67cf4316132914dc40a6c237",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"warehouses",
+								"67cf4316132914dc40a6c237"
+							]
+						},
+						"description": "Update a warehouse (superAdmin or warehouseAdmin)"
+					},
+					"response": []
+				}
+			],
+			"description": "Warehouse management endpoints"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Y2YzZDQwNTI5ZjQwNzA2Mjk4MjRmMCIsImVtYWlsIjoiemljb2FhbWVyQGdtYWlsLmNvbSIsImlhdCI6MTc0MTYzNTk4OSwiZXhwIjoxNzQyMjQwNzg5fQ.wVnUM7QTUK1jeCbvTzhN0x4Dxw6NSm0Vxpi4khRs2GU",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Y2YzZDQwNTI5ZjQwNzA2Mjk4MjRmMCIsImVtYWlsIjoiemljb2FhbWVyQGdtYWlsLmNvbSIsImlhdCI6MTc0MTYzNTk4OSwiZXhwIjoxNzQyMjQwNzg5fQ.wVnUM7QTUK1jeCbvTzhN0x4Dxw6NSm0Vxpi4khRs2GU",
+			"type": "string"
+		}
+	]
+}

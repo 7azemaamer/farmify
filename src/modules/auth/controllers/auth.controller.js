@@ -100,11 +100,13 @@ export const verifyOtp = catchAsync(async (req, res, next) => {
 export const signIn = catchAsync(async (req, res, next) => {
   //1- get email, password from body
   const { email, password } = req.body;
+  console.log(email, password);
   //2- check if email exists first
   const user = await User.findOne({ email });
   if (!user) {
     return next(new AppError("User not found", 404));
   }
+
   //3- hash password
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
   //4-check if hashed password matches the saved hashed password in db
@@ -112,7 +114,12 @@ export const signIn = catchAsync(async (req, res, next) => {
     return next(new AppError("Invalid email or password", 401));
   }
   //5- generate token
-  const token = signToken({ id: user._id });
+  const token = signToken({
+    data: {
+      id: user._id,
+      email: user.email,
+    },
+  });
   res.status(200).json({
     status: "success",
     token,
@@ -122,80 +129,148 @@ export const signIn = catchAsync(async (req, res, next) => {
 // Forget Password
 //===========================================
 export const forgetPassword = catchAsync(async (req, res, next) => {
-  //1- get email from body
+  // 1- get email from body
   const { email } = req.body;
 
-  //2- check if email exists
+  // 2- check if email exists
   const user = await User.findOne({ email });
   if (!user) return next(new AppError("Email not found", 404));
 
-  //3- generate token
+  // 3- generate OTP
+  const otp = crypto.randomInt(100000, 999999);
+
+  // 4- set OTP expiry (10 minutes from now)
+  const otpExpiresAt = Date.now() + 10 * 60 * 1000;
+
+  // 5- save OTP to user
+  user.otp = otp;
+  user.otpExpiresAt = otpExpiresAt;
+  await user.save();
+
+  // 6- send OTP via email
+  try {
+    await sendOtpEmail(email, otp);
+
+    res.status(200).json({
+      status: "success",
+      message: "OTP sent to your email",
+    });
+  } catch (error) {
+    // If email fails, reset the OTP
+    user.otp = undefined;
+    user.otpExpiresAt = undefined;
+    await user.save();
+
+    return next(
+      new AppError("Failed to send OTP email. Please try again.", 500)
+    );
+  }
+});
+
+//===========================================
+// Verify OTP for Password Reset
+//===========================================
+export const verifyResetOtp = catchAsync(async (req, res, next) => {
+  // 1- get email and OTP from body
+  const { email, otp } = req.body;
+
+  // 2- validate inputs
+  if (!email) return next(new AppError("Email is required", 400));
+  if (!otp) return next(new AppError("OTP is required", 400));
+
+  // 3- check if user exists
+  const user = await User.findOne({ email });
+  if (!user) return next(new AppError("User not found", 404));
+
+  // 4- check if OTP exists and is valid
+  if (!user.otp)
+    return next(
+      new AppError("No OTP was requested. Please request a new one.", 400)
+    );
+
+  // 5- check if OTP is expired
+  if (user.otpExpiresAt < Date.now()) {
+    // Clear expired OTP
+    user.otp = undefined;
+    user.otpExpiresAt = undefined;
+    await user.save();
+
+    return next(
+      new AppError("OTP has expired. Please request a new one.", 400)
+    );
+  }
+
+  // 6- check if OTP matches
+  if (user.otp !== parseInt(otp)) {
+    return next(new AppError("Invalid OTP", 400));
+  }
+
+  // 7- generate reset token
   const resetToken = signToken({
-    data: { id: user._id },
-    secret: process.env.JWT_RESET_SECRET,
-    expiresIn: process.env.JWT_RESET_EXPIRES_IN,
+    data: {
+      id: user._id,
+      email: user.email,
+      purpose: "password-reset",
+    },
+    expiresIn: "15m",
   });
-  //4- create reset password link
-  const resetUrl = `${req.protocol}://${req.get(
-    "host"
-  )}/api/v1/auth/reset-password/${resetToken}`;
 
-  //5- send email with a reset password link
-  // message body & subject
-  const html = `
-  <h1>Password Reset Request</h1>
-  <p>You requested a password reset. Please click the link below to reset your password:</p>
-  <a href="${resetUrl}" style="color: blue; text-decoration: underline;">Reset Password</a>
-  <p>This link will expire in 10 minutes.</p>
-  <p>If you did not request a password reset, please ignore this email.</p>
-`;
-  const subject = "Farmify - Reset password link";
-  console.log(user._id);
-
-  await sendEmail({ to: user.email, html, subject });
-
+  // 8- return success with reset token
   res.status(200).json({
     status: "success",
-    message: "Password reset link has been sent to your email.",
+    message: "OTP verified successfully",
+    resetToken,
   });
 });
+
 //===========================================
 // Reset Password
 //===========================================
 export const resetPassword = catchAsync(async (req, res, next) => {
-  //1- get password, confirmPassword from body
-  const { password, confirmPassword } = req.body;
+  // 1- get new password and confirm password from body
+  const { newPassword, confirmPassword } = req.body;
+  const { token } = req.query;
 
-  //2- get token from params, check
-  const { token } = req.params;
-  if (!token) {
-    return next(new AppError("Reset token is missing.", 400));
+  // 2- validate inputs
+  if (!newPassword) return next(new AppError("New password is required", 400));
+  if (!confirmPassword)
+    return next(new AppError("Confirm password is required", 400));
+  if (newPassword !== confirmPassword) {
+    return next(new AppError("Passwords do not match", 400));
   }
 
-  //3- verify token
-  const decoded = jwt.verify(token, process.env.JWT_RESET_SECRET);
-
-  //4- check password & confirmPassword matches
-  if (password !== confirmPassword) {
-    return next(
-      new AppError("Password and confirm password do not match.", 400)
-    );
+  // 3- verify token
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    return next(new AppError("Invalid or expired token", 401));
+  }
+  console.log(decoded.email);
+  // 4- check if token is for password reset
+  if (!decoded.email || decoded.purpose !== "password-reset") {
+    return next(new AppError("Invalid token purpose", 401));
   }
 
-  //5- hash new password
-  const hashedPassword = await bcrypt.hash(password, +process.env.SALT_ROUNDS);
-
-  //6- update password in db
+  // 5- find user
   const user = await User.findById(decoded.id);
-  if (!user) {
-    return next(new AppError("User not found.", 404));
-  }
+  if (!user) return next(new AppError("User not found", 404));
+
+  // 6- hash new password
+  const hashedPassword = await bcrypt.hash(
+    newPassword,
+    +process.env.SALT_ROUNDS
+  );
+
+  // 7- update password and clear OTP
   user.password = hashedPassword;
+  user.otp = undefined;
+  user.otpExpiresAt = undefined;
   await user.save();
 
-  //7- send success to the user
+  // 8- return success
   res.status(200).json({
     status: "success",
-    message: "Password has been reset successfully.",
+    message: "Password reset successfully",
   });
 });
