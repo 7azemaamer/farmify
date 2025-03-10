@@ -82,13 +82,13 @@
 							"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/auth/login",
+							"raw": "{{baseUrl}}/auth/signin",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"auth",
-								"login"
+								"signin"
 							]
 						},
 						"description": "Login with email and password"
