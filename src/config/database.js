@@ -2,28 +2,43 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-// Set strictQuery to false to prepare for Mongoose 7
 mongoose.set("strictQuery", false);
 
-// MongoDB connection options
-const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-  socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
-  maxPoolSize: 10, // Maintain up to 10 socket connections
-  minPoolSize: 2, // Maintain at least 2 socket connections
-  connectTimeoutMS: 10000, // Give up initial connection after 10s
-};
-
-//Add connection string for mongodb deployment
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, options);
-    console.log("Connected to MongoDB");
+    console.log("Attempting to connect to MongoDB...");
+    console.log(
+      "MongoDB URI:",
+      process.env.MONGODB_URI ? "Present" : "Missing"
+    );
+
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("Connected to MongoDB successfully");
+
+    // Log connection status
+    const connection = mongoose.connection;
+    connection.on("error", (err) => {
+      console.error("MongoDB connection error:", err);
+    });
+
+    connection.on("disconnected", () => {
+      console.warn("MongoDB disconnected");
+    });
+
+    connection.on("reconnected", () => {
+      console.log("MongoDB reconnected");
+    });
   } catch (error) {
-    console.error("MongoDB connection error:", error);
-    process.exit(1);
+    console.error("MongoDB connection error details:", {
+      name: error.name,
+      message: error.message,
+      code: error.code,
+      reason: error.reason,
+    });
+
+    if (process.env.NODE_ENV === "development") {
+      process.exit(1);
+    }
   }
 };
 
