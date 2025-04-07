@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-mongoose.set("strictQuery", false);
-
+// MongoDB connection options
 const connectDB = async () => {
   try {
     console.log("Attempting to connect to MongoDB...");
@@ -15,7 +14,6 @@ const connectDB = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log("Connected to MongoDB successfully");
 
-    // Log connection status
     const connection = mongoose.connection;
     connection.on("error", (err) => {
       console.error("MongoDB connection error:", err);
