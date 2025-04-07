@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
+
+// Set strictQuery to false to prepare for Mongoose 7
+mongoose.set("strictQuery", false);
+
 //Add connection string for mongodb deployment
 const connectDB = async () => {
   try {
