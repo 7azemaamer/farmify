@@ -1,23 +1,46 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
-let isConnected = false;
+mongoose.set("strictQuery", false);
+
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
+const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  maxPoolSize: 10,
+  minPoolSize: 2,
+  connectTimeoutMS: 10000,
+};
 
 const connectDB = async () => {
-  if (isConnected) return;
+  if (cached.conn) {
+    return cached.conn;
+  }
 
-  if (!process.env.MONGODB_URI) {
-    throw new Error("MONGODB_URI not found in environment variables");
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(process.env.MONGODB_URI, options)
+      .then((mongoose) => {
+        return mongoose;
+      });
   }
 
   try {
-    const db = await mongoose.connect(process.env.MONGODB_URI);
-    isConnected = true;
-    console.log("MongoDB connected");
-    return db;
-  } catch (error) {
-    console.error("MongoDB connection error:", error);
-    throw error;
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
   }
+
+  return cached.conn;
 };
 
 export default connectDB;

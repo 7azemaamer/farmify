@@ -23,11 +23,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-//Db Connection
-connectDB();
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
@@ -43,7 +48,7 @@ app.use("/api/v1/warehouses", warehouseRoutes);
 // Multer error handling
 app.use(handleMulterError);
 
-//Custom Error Handling
+// Custom Error Handling
 app.use(errorHandler);
 
 export default app;
