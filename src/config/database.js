@@ -1,42 +1,22 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-dotenv.config();
 
-// MongoDB connection options
+let isConnected = false;
+
 const connectDB = async () => {
+  if (isConnected) return;
+
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI not found in environment variables");
+  }
+
   try {
-    console.log("Attempting to connect to MongoDB...");
-    console.log(
-      "MongoDB URI:",
-      process.env.MONGODB_URI ? "Present" : "Missing"
-    );
-
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log("Connected to MongoDB successfully");
-
-    const connection = mongoose.connection;
-    connection.on("error", (err) => {
-      console.error("MongoDB connection error:", err);
-    });
-
-    connection.on("disconnected", () => {
-      console.warn("MongoDB disconnected");
-    });
-
-    connection.on("reconnected", () => {
-      console.log("MongoDB reconnected");
-    });
+    const db = await mongoose.connect(process.env.MONGODB_URI);
+    isConnected = true;
+    console.log("MongoDB connected");
+    return db;
   } catch (error) {
-    console.error("MongoDB connection error details:", {
-      name: error.name,
-      message: error.message,
-      code: error.code,
-      reason: error.reason,
-    });
-
-    if (process.env.NODE_ENV === "development") {
-      process.exit(1);
-    }
+    console.error("MongoDB connection error:", error);
+    throw error;
   }
 };
 
