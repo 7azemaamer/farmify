@@ -20,26 +20,65 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Enable CORS for all routes
 app.use(
   cors({
-    origin: "*", // Allow all 
+    origin: "*", // Allow all origins
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
 
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  console.log("Request Body:", req.body);
+  console.log("Request Headers:", req.headers);
+  next();
+});
+
+// Response logging middleware
+app.use((req, res, next) => {
+  const originalSend = res.send;
+  res.send = function (body) {
+    console.log(
+      `[${new Date().toISOString()}] Response Status: ${res.statusCode}`
+    );
+    console.log("Response Body:", body);
+    return originalSend.call(this, body);
+  };
+  next();
+});
+
+// Error logging middleware
+app.use((err, req, res, next) => {
+  console.error(`[${new Date().toISOString()}] Error:`, {
+    message: err.message,
+    stack: err.stack,
+    status: err.status || 500,
+    path: req.path,
+    method: req.method,
+    body: req.body,
+    headers: req.headers,
+  });
+  next(err);
+});
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files from uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
+// Initialize database connection
 app.use(async (req, res, next) => {
   try {
     await connectDB();
     next();
   } catch (error) {
+    console.error("Database connection error:", error);
     next(error);
   }
 });
