@@ -27,4 +27,11 @@ router.patch(
   userController.changePassword
 );
 
+// Update profile image
+router.patch(
+  "/profile/image",
+  uploadSingle("profileImage"),
+  userController.updateProfileImage
+);
+
 export default router;
