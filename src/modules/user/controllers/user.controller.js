@@ -36,6 +36,11 @@ export const updateProfile = catchAsync(async (req, res, next) => {
   if (phone) updateData.phone = phone;
   if (country) updateData.country = country;
 
+  // Handle profile image if uploaded
+  if (req.file) {
+    updateData.profileImage = req.file.filename;
+  }
+
   const updatedUser = await User.findByIdAndUpdate(req.user._id, updateData, {
     new: true,
     runValidators: true,
@@ -88,11 +93,10 @@ export const updateProfileImage = catchAsync(async (req, res, next) => {
 // Change Password
 //===========================================
 export const changePassword = catchAsync(async (req, res, next) => {
-  const userId = req.user._id;
   const { currentPassword, newPassword } = req.body;
 
   // Find user with password
-  const user = await User.findById(userId);
+  const user = await User.findById(req.user._id).select("+password");
 
   if (!user) {
     return next(new AppError("User not found", 404));

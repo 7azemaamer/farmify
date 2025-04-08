@@ -14,12 +14,12 @@ const router = express.Router();
 router.use(authenticate);
 
 // Profile routes
-router.get("/profile", userController.getUserProfile);
+router.get("/profile", userController.getProfile);
 router.patch(
   "/profile",
   uploadSingle("profileImage"),
   validate(updateProfileSchema),
-  userController.updateUserProfile
+  userController.updateProfile
 );
 router.patch(
   "/change-password",
