@@ -2,7 +2,7 @@ import express from "express";
 import * as userController from "../controllers/user.controller.js";
 import {
   authenticate,
-  authenticateUnverified,
+  requireVerification,
 } from "../../../middlewares/auth.middleware.js";
 import { validate } from "../../../middlewares/validate.middleware.js";
 import { uploadSingle } from "../../../middlewares/upload.middleware.js";
@@ -14,8 +14,14 @@ import {
 
 const router = express.Router();
 
-// All user routes require authentication
-router.use(authenticate);
+router.post(
+  "/send-verification-otp",
+  authenticate,
+  validate(sendOtpSchema),
+  userController.sendVerificationOtp
+);
+
+router.use(authenticate, requireVerification);
 
 // Profile routes
 router.get("/profile", userController.getProfile);
@@ -36,14 +42,6 @@ router.patch(
   "/profile/image",
   uploadSingle("profileImage"),
   userController.updateProfileImage
-);
-
-// Send verification OTP - Allow unverified users
-router.post(
-  "/send-verification-otp",
-  authenticateUnverified,
-  validate(sendOtpSchema),
-  userController.sendVerificationOtp
 );
 
 export default router;
