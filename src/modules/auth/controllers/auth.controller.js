@@ -42,7 +42,7 @@ export const signUp = catchAsync(async (req, res, next) => {
   }
 
   //Hashing Password
-  const hashedPassword = bcrypt.hash(password, +process.env.SALT_ROUNDS);
+  const hashedPassword = await bcrypt.hash(password, +process.env.SALT_ROUNDS);
   // Generate a random OTP
   const otp = crypto.randomInt(100000, 999999);
 
