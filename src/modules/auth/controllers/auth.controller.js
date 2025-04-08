@@ -274,3 +274,31 @@ export const resetPassword = catchAsync(async (req, res, next) => {
     message: "Password reset successfully",
   });
 });
+
+//===========================================
+// Get Current User
+//===========================================
+export const getCurrentUser = catchAsync(async (req, res, next) => {
+  const user = req.user;
+
+  const userData = {
+    id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    phone: user.phone,
+    country: user.country,
+    role: user.role,
+    isVerified: user.isVerified,
+    profileImage: user.profileImage,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+  };
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user: userData,
+    },
+  });
+});
