@@ -1,6 +1,9 @@
 import express from "express";
 import * as userController from "../controllers/user.controller.js";
-import { authenticate } from "../../../middlewares/auth.middleware.js";
+import {
+  authenticate,
+  authenticateUnverified,
+} from "../../../middlewares/auth.middleware.js";
 import { validate } from "../../../middlewares/validate.middleware.js";
 import { uploadSingle } from "../../../middlewares/upload.middleware.js";
 import {
@@ -35,9 +38,10 @@ router.patch(
   userController.updateProfileImage
 );
 
-// Send verification OTP
+// Send verification OTP - Allow unverified users
 router.post(
   "/send-verification-otp",
+  authenticateUnverified,
   validate(sendOtpSchema),
   userController.sendVerificationOtp
 );
