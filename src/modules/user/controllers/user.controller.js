@@ -2,6 +2,8 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import { AppError, catchAsync } from "../../../utils/errorHandling.js";
 import { handleMulterError } from "../../../middlewares/upload.middleware.js";
+import { sendOtpEmail } from "../../../utils/email.js";
+import crypto from "crypto";
 
 //===========================================
 // Get User Profile
@@ -126,4 +128,47 @@ export const changePassword = catchAsync(async (req, res, next) => {
     status: "success",
     message: "Password changed successfully",
   });
+});
+
+//===========================================
+// Send Verification OTP
+//===========================================
+export const sendVerificationOtp = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return next(new AppError("User not found", 404));
+  }
+
+  // Check if user is already verified
+  if (user.isVerified) {
+    return next(new AppError("User is already verified", 400));
+  }
+
+  // Generate a random OTP
+  const otp = crypto.randomInt(100000, 999999);
+
+  // Update user with new OTP
+  user.otp = otp;
+  user.otpExpiresAt = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
+  await user.save();
+
+  try {
+    // Send OTP email
+    await sendOtpEmail(user.email, otp);
+
+    res.status(200).json({
+      status: "success",
+      message: "OTP sent successfully. Please check your email.",
+    });
+  } catch (error) {
+    // If email fails, reset the OTP
+    user.otp = undefined;
+    user.otpExpiresAt = undefined;
+    await user.save();
+
+    return next(
+      new AppError("Failed to send OTP email. Please try again.", 500)
+    );
+  }
 });

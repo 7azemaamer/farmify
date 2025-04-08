@@ -6,6 +6,7 @@ import { uploadSingle } from "../../../middlewares/upload.middleware.js";
 import {
   updateProfileSchema,
   changePasswordSchema,
+  sendOtpSchema,
 } from "../validations/schemas/user.schema.js";
 
 const router = express.Router();
@@ -32,6 +33,13 @@ router.patch(
   "/profile/image",
   uploadSingle("profileImage"),
   userController.updateProfileImage
+);
+
+// Send verification OTP
+router.post(
+  "/send-verification-otp",
+  validate(sendOtpSchema),
+  userController.sendVerificationOtp
 );
 
 export default router;
