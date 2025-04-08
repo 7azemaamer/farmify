@@ -13,11 +13,21 @@ import orderRoutes from "./modules/store/order/routes/order.routes.js";
 import cartRoutes from "./modules/store/cart/routes/cart.routes.js";
 import equipmentRoutes from "./modules/equipment/routes/equipment.routes.js";
 import warehouseRoutes from "./modules/warehouse/routes/warehouse.routes.js";
+import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "*", // Allow all 
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 // Middleware
 app.use(express.json());
